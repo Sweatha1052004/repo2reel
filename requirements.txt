@@ -1,0 +1,14 @@
+flask
+pydub
+moviepy
+gitingest
+sentence-transformers
+networkx
+numpy<2.3  # for numba compatibility
+scikit-learn
+torch
+transformers
+coqui-tts
+google-generativeai
+python-dotenv
+edge-tts
