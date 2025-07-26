@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Repo2Reel - GitHub Repository to Video Generator</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <!-- Header -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <i class="fas fa-video text-primary fs-1 mb-3"></i>
+                <h1 class="display-4 fw-bold mb-3">Repo2Reel</h1>
+                <p class="lead text-muted">Transform any GitHub repository into an engaging AI-generated video overview</p>
+            </div>
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="row justify-content-center mb-4">
+                    <div class="col-lg-8">
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else 'info' }} alert-dismissible fade show" role="alert">
+                                <i class="fas fa-{{ 'exclamation-triangle' if category == 'error' else 'info-circle' }} me-2"></i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <!-- Main Form -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-5">
+                        <form method="POST" action="{{ url_for('process_repository') }}" id="repoForm">
+                            <div class="mb-4">
+                                <label for="github_url" class="form-label fw-semibold">
+                                    <i class="fab fa-github me-2"></i>GitHub Repository URL
+                                </label>
+                                <div class="input-group input-group-lg">
+                                    <span class="input-group-text">
+                                        <i class="fas fa-link"></i>
+                                    </span>
+                                    <input 
+                                        type="url" 
+                                        class="form-control" 
+                                        id="github_url" 
+                                        name="github_url" 
+                                        placeholder="https://github.com/username/repository" 
+                                        required
+                                        pattern="https?://github\.com/[^/]+/[^/]+"
+                                        title="Please enter a valid GitHub repository URL"
+                                    >
+                                </div>
+                                <div class="form-text text-muted mt-2">
+                                    <i class="fas fa-info-circle me-1"></i>
+                                    Enter the complete URL of any public GitHub repository
+                                </div>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg" id="generateBtn">
+                                    <i class="fas fa-magic me-2"></i>
+                                    Generate Video
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <h2 class="text-center mb-4">How It Works</h2>
+            </div>
+        </div>
+        
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="card h-100 border-0 bg-secondary">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-search text-primary fs-1 mb-3"></i>
+                        <h5 class="card-title">Repository Analysis</h5>
+                        <p class="card-text text-muted">
+                            Advanced AI analyzes your repository structure, code, and documentation to understand the project
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 bg-secondary">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-microphone text-primary fs-1 mb-3"></i>
+                        <h5 class="card-title">Script Generation</h5>
+                        <p class="card-text text-muted">
+                            Creates an engaging script highlighting key features, technologies, and project highlights
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="col-md-4">
+                <div class="card h-100 border-0 bg-secondary">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-video text-primary fs-1 mb-3"></i>
+                        <h5 class="card-title">Video Production</h5>
+                        <p class="card-text text-muted">
+                            Combines AI-generated narration with dynamic visuals to create a professional video overview
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Technical Info -->
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="card border-0 bg-dark">
+                    <div class="card-body p-4">
+                        <h5 class="card-title">
+                            <i class="fas fa-cogs me-2"></i>
+                            Technical Features
+                        </h5>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success me-2"></i>CPU-optimized processing</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Free and open-source tools</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Advanced repository analysis</li>
+                                </ul>
+                            </div>
+                            <div class="col-md-6">
+                                <ul class="list-unstyled">
+                                    <li><i class="fas fa-check text-success me-2"></i>High-quality audio synthesis</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Dynamic video generation</li>
+                                    <li><i class="fas fa-check text-success me-2"></i>Professional video output</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

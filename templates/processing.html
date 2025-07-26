@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Processing Repository - Repo2Reel</title>
+    <link href="https://cdn.replit.com/agent/bootstrap-agent-dark-theme.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+    <div class="container py-5">
+        <!-- Header -->
+        <div class="row justify-content-center mb-5">
+            <div class="col-lg-8 text-center">
+                <i class="fas fa-video text-primary fs-1 mb-3"></i>
+                <h1 class="display-4 fw-bold mb-3">Repo2Reel</h1>
+                <p class="lead text-muted">Creating your repository video...</p>
+            </div>
+        </div>
+
+        <!-- Processing Status -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card shadow-lg border-0">
+                    <div class="card-body p-5 text-center">
+                        {% if status.status == 'error' %}
+                            <!-- Error State -->
+                            <i class="fas fa-exclamation-triangle text-danger fs-1 mb-4"></i>
+                            <h3 class="text-danger mb-3">Processing Error</h3>
+                            <p class="text-muted mb-4">{{ status.message }}</p>
+                            <a href="{{ url_for('index') }}" class="btn btn-primary">
+                                <i class="fas fa-arrow-left me-2"></i>
+                                Try Again
+                            </a>
+                        {% else %}
+                            <!-- Processing State -->
+                            <div class="spinner-border text-primary mb-4" role="status" style="width: 4rem; height: 4rem;">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                            
+                            <h3 class="mb-3" id="statusMessage">{{ status.message }}</h3>
+                            
+                            <!-- Progress Bar -->
+                            <div class="progress mb-4" style="height: 20px;">
+                                <div 
+                                    class="progress-bar progress-bar-striped progress-bar-animated" 
+                                    role="progressbar" 
+                                    id="progressBar"
+                                    style="width: {{ status.progress }}%"
+                                    aria-valuenow="{{ status.progress }}" 
+                                    aria-valuemin="0" 
+                                    aria-valuemax="100"
+                                >
+                                    <span id="progressText">{{ status.progress }}%</span>
+                                </div>
+                            </div>
+
+                            <!-- Processing Steps -->
+                            <div class="row text-start">
+                                <div class="col-12">
+                                    <h5 class="mb-3">
+                                        <i class="fas fa-list-check me-2"></i>
+                                        Processing Steps
+                                    </h5>
+                                    
+                                    <div class="list-group list-group-flush">
+                                        <div class="list-group-item d-flex align-items-center step-item" data-step="10">
+                                            <i class="fas fa-download step-icon me-3"></i>
+                                            <span>Downloading repository content</span>
+                                            <i class="fas fa-check text-success ms-auto step-check d-none"></i>
+                                        </div>
+                                        
+                                        <div class="list-group-item d-flex align-items-center step-item" data-step="30">
+                                            <i class="fas fa-search step-icon me-3"></i>
+                                            <span>Analyzing code structure and features</span>
+                                            <i class="fas fa-check text-success ms-auto step-check d-none"></i>
+                                        </div>
+                                        
+                                        <div class="list-group-item d-flex align-items-center step-item" data-step="50">
+                                            <i class="fas fa-pen step-icon me-3"></i>
+                                            <span>Generating video script</span>
+                                            <i class="fas fa-check text-success ms-auto step-check d-none"></i>
+                                        </div>
+                                        
+                                        <div class="list-group-item d-flex align-items-center step-item" data-step="70">
+                                            <i class="fas fa-microphone step-icon me-3"></i>
+                                            <span>Creating audio narration</span>
+                                            <i class="fas fa-check text-success ms-auto step-check d-none"></i>
+                                        </div>
+                                        
+                                        <div class="list-group-item d-flex align-items-center step-item" data-step="90">
+                                            <i class="fas fa-video step-icon me-3"></i>
+                                            <span>Generating video content</span>
+                                            <i class="fas fa-check text-success ms-auto step-check d-none"></i>
+                                        </div>
+                                        
+                                        <div class="list-group-item d-flex align-items-center step-item" data-step="100">
+                                            <i class="fas fa-magic step-icon me-3"></i>
+                                            <span>Finalizing video production</span>
+                                            <i class="fas fa-check text-success ms-auto step-check d-none"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Estimated Time -->
+                            <div class="mt-4 p-3 bg-secondary rounded">
+                                <i class="fas fa-clock me-2"></i>
+                                <small class="text-muted">
+                                    Estimated processing time: 2-5 minutes depending on repository size
+                                </small>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <script>
+        // Auto-refresh processing status
+        const sessionId = "{{ session_id }}";
+        const currentProgress = {{ status.progress }};
+        
+        function updateProcessingStatus() {
+            if ("{{ status.status }}" === "error") {
+                return; // Don't refresh if there's an error
+            }
+            
+            fetch(`/status/${sessionId}`)
+                .then(response => response.json())
+                .then(data => {
+                    // Update progress bar
+                    const progressBar = document.getElementById('progressBar');
+                    const progressText = document.getElementById('progressText');
+                    const statusMessage = document.getElementById('statusMessage');
+                    
+                    if (progressBar && progressText && statusMessage) {
+                        progressBar.style.width = data.progress + '%';
+                        progressBar.setAttribute('aria-valuenow', data.progress);
+                        progressText.textContent = data.progress + '%';
+                        statusMessage.textContent = data.message;
+                    }
+                    
+                    // Update step indicators
+                    updateStepIndicators(data.progress);
+                    
+                    // Check if completed
+                    if (data.status === 'completed') {
+                        window.location.href = `/result/${sessionId}`;
+                    } else if (data.status === 'error') {
+                        location.reload(); // Reload to show error state
+                    }
+                })
+                .catch(error => {
+                    console.error('Error fetching status:', error);
+                });
+        }
+        
+        function updateStepIndicators(progress) {
+            const stepItems = document.querySelectorAll('.step-item');
+            
+            stepItems.forEach(item => {
+                const stepProgress = parseInt(item.getAttribute('data-step'));
+                const icon = item.querySelector('.step-icon');
+                const check = item.querySelector('.step-check');
+                
+                if (progress >= stepProgress) {
+                    icon.classList.add('text-success');
+                    check.classList.remove('d-none');
+                    item.classList.add('completed');
+                } else if (progress >= stepProgress - 20) {
+                    icon.classList.add('text-primary');
+                    item.classList.add('active');
+                }
+            });
+        }
+        
+        // Initialize step indicators
+        updateStepIndicators(currentProgress);
+        
+        // Refresh every 2 seconds
+        if ("{{ status.status }}" !== "error") {
+            setInterval(updateProcessingStatus, 2000);
+        }
+    </script>
+</body>
+</html>
