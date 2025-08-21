@@ -10,7 +10,7 @@ import shutil
 
 logger = logging.getLogger(__name__)
 
-class GraphRAGProcessor:
+class RAGProcessor:
     """Process GitHub repositories using gitingest for content analysis"""
     
     def __init__(self):
