@@ -67,7 +67,7 @@ repo2reel/
 ├── generate_video.py     # Enhanced video generation with professional visuals
 ├── generate_audio.py     # Audio synthesis using Edge TTS
 ├── merge_av.py          # Audio-video merging with ffmpeg
-├── graph_rag.py         # Repository analysis and content extraction
+├── rag.py               # Repository analysis and content extraction
 ├── llm_utils.py         # LLM integration for script generation
 ├── prompt_generator.py   # Optimized prompts for video scripts
 ├── static/              # Frontend assets
