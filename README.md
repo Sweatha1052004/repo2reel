@@ -141,6 +141,12 @@ Set these environment variables for enhanced functionality:
 - Close other applications during video generation
 - Use Groq API key for fastest script generation
 
+###**DEMO VIDEO**
+
+
+https://github.com/user-attachments/assets/de607cb4-afe4-4d88-a4c2-c7091245009f
+
+
 ## License
 
 This project is open source. Feel free to modify and distribute according to your needs.
